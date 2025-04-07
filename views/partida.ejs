@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investigação em Andamento - Detetive</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('/images/mansion-bg.png') center/cover;
+            color: #e0c088;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(139, 0, 0, 0.3);
+            border-radius: 10px;
+            border: 2px solid #8b0000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: #d4af37;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .save-button {
+            padding: 10px 20px;
+            background: rgba(139, 0, 0, 0.7);
+            border: 1px solid #8b0000;
+            color: #e0c088;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .save-button:hover {
+            background: rgba(139, 0, 0, 1);
+        }
+
+        .card {
+            background: rgba(43, 27, 23, 0.95);
+            border: 2px solid #8b0000;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            background: rgba(139, 0, 0, 0.3);
+            border: 1px solid #8b0000;
+            color: #e0c088;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .tab-button:hover {
+            background: rgba(139, 0, 0, 0.5);
+        }
+
+        .tab-button.active {
+            background: #8b0000;
+            color: #fff;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .suspects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .suspect-card {
+            background: rgba(43, 27, 23, 0.8);
+            border: 1px solid #8b0000;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .suspect-card:hover {
+            transform: scale(1.05);
+        }
+
+        .suspect-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            border: 2px solid #8b0000;
+        }
+
+        .suspect-name {
+            color: #e0c088;
+            font-size: 1.1em;
+            display: block;
+        }
+
+        .weapons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .weapon-card {
+            background: rgba(43, 27, 23, 0.8);
+            border: 1px solid #8b0000;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .weapon-card:hover {
+            transform: scale(1.05);
+        }
+
+        .weapon-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 2px solid #8b0000;
+        }
+
+        .weapon-name {
+            color: #e0c088;
+            font-size: 1.1em;
+            display: block;
+        }
+
+        .locations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .location-card {
+            background: rgba(43, 27, 23, 0.8);
+            border: 1px solid #8b0000;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .location-card:hover {
+            transform: scale(1.05);
+        }
+
+        .location-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 2px solid #8b0000;
+        }
+
+        .location-name {
+            color: #e0c088;
+            font-size: 1.1em;
+            display: block;
+        }
+    .status-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(139, 0, 0, 0.7);
+            color: #e0c088;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            border: 1px solid #8b0000;
+            transition: background 0.3s;
+        }
+
+        .status-icon:hover {
+            background: rgba(139, 0, 0, 1);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(43, 27, 23, 0.95);
+            border: 2px solid #8b0000;
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+        }
+
+        .suspect-card, .weapon-card, .location-card {
+            position: relative;
+        }
+    .modal-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .modal-button {
+            padding: 10px;
+            background: rgba(139, 0, 0, 0.3);
+            border: 1px solid #8b0000;
+            color: #e0c088;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .modal-button:hover {
+            background: rgba(139, 0, 0, 0.5);
+        }
+
+        .modal-title {
+            color: #d4af37;
+            margin-bottom: 15px;
+        }
+
+        .status-text {
+            margin-top: 5px;
+            font-size: 0.9em;
+            display: block;
+        }
+
+        .status-suspeito { color: #ffd700; }
+        .status-confirmado { color: #4CAF50; }
+        .status-descartado { color: #ff4444; }
+        .status-mao { color: #2196F3; }
+        
+        .grayscale {
+            filter: grayscale(100%);
+            opacity: 0.7;
+        }
+        
+        /* Hamburger Menu Styles */
+        .hamburger-menu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+        }
+        
+        .menu-icon {
+            display: block;
+            width: 35px;
+            height: 30px;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .menu-icon span {
+            display: block;
+            position: absolute;
+            height: 4px;
+            width: 100%;
+            background: #e0c088;
+            border-radius: 4px;
+            opacity: 1;
+            left: 0;
+            transform: rotate(0deg);
+            transition: .25s ease-in-out;
+        }
+        
+        .menu-icon span:nth-child(1) {
+            top: 0px;
+        }
+        
+        .menu-icon span:nth-child(2), .menu-icon span:nth-child(3) {
+            top: 13px;
+        }
+        
+        .menu-icon span:nth-child(4) {
+            top: 26px;
+        }
+        
+        .menu-icon.open span:nth-child(1) {
+            top: 13px;
+            width: 0%;
+            left: 50%;
+        }
+        
+        .menu-icon.open span:nth-child(2) {
+            transform: rotate(45deg);
+        }
+        
+        .menu-icon.open span:nth-child(3) {
+            transform: rotate(-45deg);
+        }
+        
+        .menu-icon.open span:nth-child(4) {
+            top: 13px;
+            width: 0%;
+            left: 50%;
+        }
+        
+        .menu-items {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 250px;
+            height: 100%;
+            background: rgba(43, 27, 23, 0.95);
+            border-left: 2px solid #8b0000;
+            padding-top: 70px;
+            transition: right 0.3s ease-in-out;
+            z-index: 1000;
+        }
+        
+        .menu-items.open {
+            right: 0;
+        }
+        
+        .menu-item {
+            display: block;
+            padding: 15px 25px;
+            color: #e0c088;
+            text-decoration: none;
+            font-size: 1.2em;
+            border-bottom: 1px solid rgba(139, 0, 0, 0.3);
+            transition: background 0.3s;
+        }
+        
+        .menu-item:hover {
+            background: rgba(139, 0, 0, 0.5);
+        }
+        
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .menu-overlay.open {
+            display: block;
+        }
+        
+        /* Solve Modal Styles */
+        .solve-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .solve-section {
+            margin-bottom: 10px;
+        }
+        
+        .solve-section h4 {
+            margin: 0 0 5px 0;
+            color: #d4af37;
+        }
+        
+        .solve-select {
+            width: 100%;
+            padding: 8px;
+            background: rgba(43, 27, 23, 0.9);
+            border: 1px solid #8b0000;
+            color: #e0c088;
+            border-radius: 4px;
+        }
+        
+        .solve-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .solve-button, .cancel-button {
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .solve-button {
+            background: rgba(139, 0, 0, 0.7);
+            border: 1px solid #8b0000;
+            color: #e0c088;
+        }
+        
+        .solve-button:hover {
+            background: rgba(139, 0, 0, 1);
+        }
+        
+        .cancel-button {
+            background: rgba(50, 50, 50, 0.7);
+            border: 1px solid #333;
+            color: #e0c088;
+        }
+        
+        .cancel-button:hover {
+            background: rgba(50, 50, 50, 1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hamburger Menu -->
+        <div class="hamburger-menu">
+            <div class="menu-icon" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="menu-items">
+            <a href="#" class="menu-item" onclick="saveGameState(); return false;">Salvar</a>
+            <a href="#" class="menu-item" onclick="openSolveModal(); return false;">Resolver</a>
+            <a href="/welcome" class="menu-item">Sair</a>
+        </div>
+        
+        <div class="menu-overlay" onclick="toggleMenu()"></div>
+        
+        <div class="header">
+            <div class="header-content">
+                <h1>Investigação Nº 1</h1>
+                
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="tabs">
+                <button class="tab-button active" onclick="openTab('suspects')">Suspeitos</button>
+                <button class="tab-button" onclick="openTab('weapons')">Armas</button>
+                <button class="tab-button" onclick="openTab('locations')">Locais</button>
+            </div>
+
+            <div id="suspects" class="tab-content active">
+                <div class="suspects-grid">
+                    <div class="suspect-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/sargento.png" alt="Sargento Mostarda" class="suspect-image">
+                        <span class="suspect-name">Sargento Mostarda</span>
+                    </div>
+                    <div class="suspect-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/florista.png" alt="Florista Dona Branca" class="suspect-image">
+                        <span class="suspect-name">Florista Dona Branca</span>
+                    </div>
+                    <div class="suspect-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/mordomo.png" alt="Mordomo James" class="suspect-image">
+                        <span class="suspect-name">Mordomo James</span>
+                    </div>
+                    <div class="suspect-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/advogado.png" alt="Advogado Sr. Marinho" class="suspect-image">
+                        <span class="suspect-name">Advogado Sr. Marinho</span>
+                    </div>
+                    <div class="suspect-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/dancarina.png" alt="Dançarina Sra Rosa" class="suspect-image">
+                        <span class="suspect-name">Dançarina Sra Rosa</span>
+                    </div>
+                    <div class="suspect-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/coveiro.png" alt="Coveiro Sergio Soturno" class="suspect-image">
+                        <span class="suspect-name">Coveiro Sergio Soturno</span>
+                    </div>
+                    <div class="suspect-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/chef.png" alt="Chef Tony Gourmet" class="suspect-image">
+                        <span class="suspect-name">Chef Tony Gourmet</span>
+                    </div>
+                    <div class="suspect-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/medica.png" alt="Médica Dona Violeta" class="suspect-image">
+                        <span class="suspect-name">Médica Dona Violeta</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="weapons" class="tab-content">
+                <div class="weapons-grid">
+                    <div class="weapon-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/pe-de-cabra.png" alt="Pé de Cabra" class="weapon-image">
+                        <span class="weapon-name">Pé de Cabra</span>
+                    </div>
+                    <div class="weapon-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/espingarda.png" alt="Espingarda" class="weapon-image">
+                        <span class="weapon-name">Espingarda</span>
+                    </div>
+                    <div class="weapon-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/faca.png" alt="Faca" class="weapon-image">
+                        <span class="weapon-name">Faca</span>
+                    </div>
+                    <div class="weapon-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/pa.png" alt="Pá" class="weapon-image">
+                        <span class="weapon-name">Pá</span>
+                    </div>
+                    <div class="weapon-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/tesoura.png" alt="Tesoura" class="weapon-image">
+                        <span class="weapon-name">Tesoura</span>
+                    </div>
+                    <div class="weapon-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/soco-ingles.png" alt="Soco Inglês" class="weapon-image">
+                        <span class="weapon-name">Soco Inglês</span>
+                    </div>
+                    <div class="weapon-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/veneno.png" alt="Veneno" class="weapon-image">
+                        <span class="weapon-name">Veneno</span>
+                    </div>
+                    <div class="weapon-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/arma-quimica.png" alt="Arma Química" class="weapon-image">
+                        <span class="weapon-name">Arma Química</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="locations" class="tab-content">
+                <div class="locations-grid">
+                    <div class="location-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/banco.png" alt="Banco" class="location-image">
+                        <span class="location-name">Banco</span>
+                    </div>
+                    <div class="location-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/boate.png" alt="Boate" class="location-image">
+                        <span class="location-name">Boate</span>
+                    </div>
+                    <div class="location-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/cemiterio.png" alt="Cemitério" class="location-image">
+                        <span class="location-name">Cemitério</span>
+                    </div>
+                    <div class="location-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/floricultura.png" alt="Floricultura" class="location-image">
+                        <span class="location-name">Floricultura</span>
+                    </div>
+                    <div class="location-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/hospital.png" alt="Hospital" class="location-image">
+                        <span class="location-name">Hospital</span>
+                    </div>
+                    <div class="location-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/hotel.png" alt="Hotel" class="location-image">
+                        <span class="location-name">Hotel</span>
+                    </div>
+                    <div class="location-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/mansao.png" alt="Mansão" class="location-image">
+                        <span class="location-name">Mansão</span>
+                    </div>
+                    <div class="location-card">
+                        <div class="status-icon" onclick="openModal(this.parentElement)">?</div>
+                        <img src="/images/praca.png" alt="Praça Central" class="location-image">
+                        <span class="location-name">Praça Central</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="itemModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title">Selecione o Status</h3>
+            <div class="modal-options">
+                <button onclick="setStatus('suspeito')" class="modal-button">❓ Suspeito</button>
+                <button onclick="setStatus('confirmado')" class="modal-button">✅ Confirmado</button>
+                <button onclick="setStatus('descartado')" class="modal-button">❌ Descartado</button>
+                <button onclick="setStatus('mao')" class="modal-button">👆 Na Minha Mão</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Solve Modal -->
+    <div id="solveModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title">Resolver Caso</h3>
+            <p>Selecione o culpado, a arma e o local do crime:</p>
+            
+            <div class="solve-form">
+                <div class="solve-section">
+                    <h4>Culpado:</h4>
+                    <select id="suspectSelect" class="solve-select">
+                        <option value="">Selecione o culpado</option>
+                        <option value="Sargento Mostarda">Sargento Mostarda</option>
+                        <option value="Florista Dona Branca">Florista Dona Branca</option>
+                        <option value="Mordomo James">Mordomo James</option>
+                        <option value="Advogado Sr. Marinho">Advogado Sr. Marinho</option>
+                        <option value="Dançarina Sra Rosa">Dançarina Sra Rosa</option>
+                        <option value="Coveiro Sergio Soturno">Coveiro Sergio Soturno</option>
+                        <option value="Chef Tony Gourmet">Chef Tony Gourmet</option>
+                        <option value="Médica Dona Violeta">Médica Dona Violeta</option>
+                    </select>
+                </div>
+                
+                <div class="solve-section">
+                    <h4>Arma:</h4>
+                    <select id="weaponSelect" class="solve-select">
+                        <option value="">Selecione a arma</option>
+                        <option value="Pé de Cabra">Pé de Cabra</option>
+                        <option value="Espingarda">Espingarda</option>
+                        <option value="Faca">Faca</option>
+                        <option value="Pá">Pá</option>
+                        <option value="Tesoura">Tesoura</option>
+                        <option value="Soco Inglês">Soco Inglês</option>
+                        <option value="Veneno">Veneno</option>
+                        <option value="Arma Química">Arma Química</option>
+                    </select>
+                </div>
+                
+                <div class="solve-section">
+                    <h4>Local:</h4>
+                    <select id="locationSelect" class="solve-select">
+                        <option value="">Selecione o local</option>
+                        <option value="Banco">Banco</option>
+                        <option value="Boate">Boate</option>
+                        <option value="Cemitério">Cemitério</option>
+                        <option value="Floricultura">Floricultura</option>
+                        <option value="Hospital">Hospital</option>
+                        <option value="Hotel">Hotel</option>
+                        <option value="Mansão">Mansão</option>
+                        <option value="Praça Central">Praça Central</option>
+                    </select>
+                </div>
+                
+                <div class="solve-actions">
+                    <button onclick="solveCase()" class="solve-button">Resolver Caso</button>
+                    <button onclick="document.getElementById('solveModal').style.display='none'" class="cancel-button">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    let currentCard = null;
+
+    function openTab(tabName) {
+        const tabContents = document.getElementsByClassName('tab-content');
+        for (let content of tabContents) {
+            content.classList.remove('active');
+        }
+
+        const tabs = document.getElementsByClassName('tab-button');
+        for (let tab of tabs) {
+            tab.classList.remove('active');
+        }
+
+        document.getElementById(tabName).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    function openModal(card) {
+        currentCard = card;
+        document.getElementById('itemModal').style.display = 'block';
+    }
+
+    function setStatus(status) {
+        const statusTexts = {
+            'suspeito': '❓ Suspeito',
+            'confirmado': '✅ Confirmado',
+            'descartado': '❌ Descartado',
+            'mao': '👆 Na Minha Mão'
+        };
+
+        const existingStatus = currentCard.querySelector('.status-text');
+        if (existingStatus) {
+            existingStatus.remove();
+        }
+
+        const statusElement = document.createElement('span');
+        statusElement.className = `status-text status-${status}`;
+        statusElement.textContent = statusTexts[status];
+        currentCard.appendChild(statusElement);
+
+        // Update the status icon to show the current status
+        const statusIcon = currentCard.querySelector('.status-icon');
+        if (statusIcon) {
+            const statusSymbols = {
+                'suspeito': '❓',
+                'confirmado': '✅',
+                'descartado': '❌',
+                'mao': '👆'
+            };
+            statusIcon.textContent = statusSymbols[status];
+        }
+
+        // Apply grayscale effect for descartado items
+        const image = currentCard.querySelector('img');
+        if (image) {
+            if (status === 'descartado') {
+                image.classList.add('grayscale');
+            } else {
+                image.classList.remove('grayscale');
+            }
+        }
+
+        document.getElementById('itemModal').style.display = 'none';
+    }
+
+    // Combine all DOMContentLoaded event handlers
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load saved game data if available
+        const gameData = <%- typeof gameData !== 'undefined' && gameData ? JSON.stringify(gameData) : 'null' %>;
+        
+        if (gameData) {
+            // Set game number in the header
+            document.querySelector('.header h1').textContent = `Investigação Nº ${gameData.gameNumber}`;
+            
+            // Load all card statuses
+            loadCardStatuses(gameData.suspects, 'suspect-card');
+            loadCardStatuses(gameData.weapons, 'weapon-card');
+            loadCardStatuses(gameData.locations, 'location-card');
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('itemModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        // Add save game button functionality
+        document.getElementById('saveGameBtn').addEventListener('click', function() {
+            saveGameState();
+        });
+    });
+
+    function loadCardStatuses(items, cardClass) {
+        if (!items || !items.length) return;
+        
+        const cards = document.querySelectorAll('.' + cardClass);
+        
+        items.forEach(item => {
+            // Find the matching card
+            for (let card of cards) {
+                const nameElement = card.querySelector('.suspect-name, .weapon-name, .location-name');
+                if (nameElement && nameElement.textContent === item.name) {
+                    // Set the status
+                    if (item.status && item.status !== 'unknown') {
+                        setCardStatus(card, item.status);
+                    }
+                    break;
+                }
+            }
+        });
+    }
+    
+    function setCardStatus(card, status) {
+        // Create a temporary currentCard reference
+        currentCard = card;
+        // Call the existing setStatus function
+        setStatus(status);
+    }
+    
+    function saveGameState() {
+        // Get all cards with their statuses
+        const suspects = collectCardData('suspect-card');
+        const weapons = collectCardData('weapon-card');
+        const locations = collectCardData('location-card');
+        
+        // Get game number from the header
+        const gameNumber = document.querySelector('.header h1').textContent.match(/\d+/)[0];
+        
+        // Create game state object
+        const gameState = {
+            gameNumber: gameNumber,
+            suspects: suspects,
+            weapons: weapons,
+            locations: locations
+        };
+        
+        // Send data to server
+        fetch('/save-game', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(gameState)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Investigação salva com sucesso!');
+            } else {
+                alert('Erro ao salvar: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Erro ao salvar a investigação. Tente novamente.');
+        });
+    }
+    
+    function collectCardData(cardClass) {
+        const cards = document.querySelectorAll('.' + cardClass);
+        const cardData = [];
+        
+        cards.forEach(card => {
+            const name = card.querySelector('.suspect-name, .weapon-name, .location-name').textContent;
+            const image = card.querySelector('img').getAttribute('src');
+            const statusIcon = card.querySelector('.status-icon').textContent;
+            let status = 'unknown';
+            
+            // Check for status text element
+            const statusText = card.querySelector('.status-text');
+            if (statusText) {
+                if (statusText.classList.contains('status-suspeito')) status = 'suspeito';
+                else if (statusText.classList.contains('status-confirmado')) status = 'confirmado';
+                else if (statusText.classList.contains('status-descartado')) status = 'descartado';
+                else if (statusText.classList.contains('status-mao')) status = 'mao';
+            }
+            
+            const isGrayscale = card.querySelector('img').classList.contains('grayscale');
+            
+            cardData.push({
+                name: name,
+                image: image,
+                status: status,
+                isGrayscale: isGrayscale
+            });
+        });
+        
+        return cardData;
+    }
+    
+    // Hamburger menu functions
+    function toggleMenu() {
+        const menuIcon = document.querySelector('.menu-icon');
+        const menuItems = document.querySelector('.menu-items');
+        const menuOverlay = document.querySelector('.menu-overlay');
+        
+        menuIcon.classList.toggle('open');
+        menuItems.classList.toggle('open');
+        menuOverlay.classList.toggle('open');
+    }
+    
+    function openSolveModal() {
+        document.getElementById('solveModal').style.display = 'block';
+        toggleMenu();
+    }
+    
+    function solveCase() {
+        const suspect = document.getElementById('suspectSelect').value;
+        const weapon = document.getElementById('weaponSelect').value;
+        const location = document.getElementById('locationSelect').value;
+        const gameNumber = document.querySelector('.header h1').textContent.match(/\d+/)[0];
+        
+        // Get user name (you can add an input field for this or use a default)
+        const userName = prompt('Digite seu nome de detetive:', 'Detetive');
+        
+        // Validate selections
+        if (!suspect || !weapon || !location) {
+            alert('Por favor, selecione o culpado, a arma e o local do crime.');
+            return;
+        }
+        
+        // Confirm the solution
+        if (confirm(`Você tem certeza que deseja resolver este caso?\n\nCulpado: ${suspect}\nArma: ${weapon}\nLocal: ${location}`)) {
+            // Send data to server
+            fetch('/solve-case', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    gameNumber: gameNumber,
+                    suspect: suspect,
+                    weapon: weapon,
+                    location: location,
+                    userName: userName
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Caso resolvido com sucesso!');
+                    // Redirect to history page
+                    window.location.href = '/historico';
+                } else {
+                    alert('Erro ao resolver caso: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Erro ao resolver o caso. Tente novamente.');
+            });
+        }
+        
+        // Close the modal
+        document.getElementById('solveModal').style.display = 'none';
+    }
+</script>

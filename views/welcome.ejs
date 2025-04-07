@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bem-vindo ao Detetive</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('/images/mansion-bg.png') center/cover;
+            color: #e0c088;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .welcome-container {
+            text-align: center;
+            background: rgba(43, 27, 23, 0.9);
+            border: 2px solid #8b0000;
+            border-radius: 10px;
+            padding: 40px;
+            max-width: 600px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            color: #d4af37;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        p {
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .welcome-button {
+            padding: 12px 25px;
+            background: rgba(139, 0, 0, 0.7);
+            border: 1px solid #8b0000;
+            color: #e0c088;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .welcome-button:hover {
+            background: rgba(139, 0, 0, 1);
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-container">
+        <h1>Bem-vindo ao Detetive</h1>
+        <p>Você está pronto para resolver mistérios e desvendar crimes? Escolha uma das opções abaixo para começar sua aventura como detetive.</p>
+        
+        <div class="buttons">
+            <a href="/partida" class="welcome-button">Nova Investigação</a>
+            <a href="/historico" class="welcome-button">Histórico de Investigações</a>
+            <a href="/" class="welcome-button">Sair</a>
+        </div>
+    </div>
+</body>
+</html>
